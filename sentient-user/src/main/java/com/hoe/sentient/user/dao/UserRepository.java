@@ -12,4 +12,7 @@ import com.hoe.sentient.user.domain.entity.User;
  */
 public interface UserRepository extends IRepository<User> {
 
+    User getByUsername(String username);
+
+    User getByEmail(String email);
 }

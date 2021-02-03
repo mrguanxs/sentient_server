@@ -1,6 +1,8 @@
 package com.hoe.sentient.user.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.hoe.sentient.user.dao.UserRepository;
+import com.hoe.sentient.user.domain.entity.User;
 import com.hoe.sentient.user.service.UserService;
 import org.springframework.stereotype.Service;
 
