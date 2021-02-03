@@ -1,0 +1,25 @@
+### IntelliJ IDEA ###
+.idea/
+*.iml
+*.csv
+.DS_Store
+target/
+*.swp
+*.swo
+*.txt12
+*.log
+logs/
+/target
+.project
+.vagrant
+.classpath
+.settings
+*.key
+~*.doc
+*.pdb
+dependency-reduced-pom.xml
+log4j.properties
+logback.xml
+#application.yml
+rebel.xml
+application.properties
