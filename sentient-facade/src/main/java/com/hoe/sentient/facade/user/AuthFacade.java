@@ -41,6 +41,8 @@ public class AuthFacade {
             loginDTO =new LoginDTO();
             loginDTO.setId(user.getId());
             loginDTO.setUsername(user.getUsername());
+        }else {
+            throw new RuntimeException("登录失败");
         }
 
         return loginDTO;
@@ -62,6 +64,7 @@ public class AuthFacade {
             user.setUsername(registerReq.getEmail().split("@")[0]);
         }
         user.setEmail(registerReq.getEmail());
+        user.setPassword(registerReq.getPassword());
         userRepository.save(user);
     }
 }
