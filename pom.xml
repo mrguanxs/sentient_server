@@ -11,6 +11,7 @@
         <module>sentient-mood</module>
         <module>sentient-heart</module>
         <module>sentient-report</module>
+        <module>sentient-chat</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

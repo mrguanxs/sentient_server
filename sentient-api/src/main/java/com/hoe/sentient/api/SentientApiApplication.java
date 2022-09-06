@@ -4,8 +4,10 @@ import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-@SpringBootApplication(scanBasePackages="com.hoe.sentient",
+@EnableWebMvc
+@SpringBootApplication(scanBasePackages="com",
         exclude= DruidDataSourceAutoConfigure.class)
 @MapperScan(value = "com.hoe.sentient.*.mapper")
 public class SentientApiApplication {
