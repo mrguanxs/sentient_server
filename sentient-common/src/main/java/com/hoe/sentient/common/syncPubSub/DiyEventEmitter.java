@@ -61,7 +61,7 @@ public class DiyEventEmitter{
         return entityClass;
     }
 
-    private static volatile DiyEventEmitter instance = getInstance();
+    private static DiyEventEmitter instance;
     private DiyEventEmitter() {
     }
     private static DiyEventEmitter getInstance(){

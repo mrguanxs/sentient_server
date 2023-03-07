@@ -33,11 +33,25 @@
             <artifactId>sentient-facade</artifactId>
             <groupId>com.hoe</groupId>
         </dependency>
-
         <dependency>
-            <groupId>com.ziiforce.foundation</groupId>
-            <artifactId>zii-foundation-rabbitmq</artifactId>
-            <version>2.0.4-SNAPSHOT</version>
+            <artifactId>sentient-ws</artifactId>
+            <groupId>com.hoe</groupId>
+        </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>com.ziiforce.foundation</groupId>-->
+<!--            <artifactId>zii-foundation-rabbitmq</artifactId>-->
+<!--            <version>2.0.4-SNAPSHOT</version>-->
+<!--        </dependency>-->
+
+        <!-- swagger-ui -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
         </dependency>
 
     </dependencies>
