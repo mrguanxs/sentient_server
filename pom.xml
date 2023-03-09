@@ -32,6 +32,7 @@
         <sentient-module.version>0.0.1-SNAPSHOT</sentient-module.version>
         <mybatis-plus.version>3.1.2</mybatis-plus.version>
         <druid.version>1.1.10</druid.version>
+        <redis.version>2.1.9.RELEASE</redis.version>
         <lombok.version>1.18.10</lombok.version>
         <fastjson.version>1.2.60</fastjson.version>
         <jwt.version>0.9.1</jwt.version>
@@ -89,6 +90,12 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid-spring-boot-starter</artifactId>
                 <version>${druid.version}</version>
+            </dependency>
+            <!--Redis-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-redis</artifactId>
+                <version>${redis.version}</version>
             </dependency>
 
             <dependency>

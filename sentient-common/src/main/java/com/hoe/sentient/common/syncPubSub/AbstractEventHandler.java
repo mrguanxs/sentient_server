@@ -11,15 +11,19 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public abstract class AbstractEventHandler<T extends AbstractEvent> {
 
-    public void onMessage(T event){
+    protected void onMessage(T event){
         log.info("接收到订阅消息,event:{}", JSONObject.toJSONString(event));
         try {
             handle(event);
         }catch (Exception e){
             log.error("接收到订阅消息,处理失败,event:{},失败原因:{}", JSONObject.toJSONString(event), e.getMessage(), e);
+            onError(event, e);
         }
         log.info("接收到订阅消息,处理成功");
     }
 
     public abstract void handle(T msg);
+
+    public void onError(T msg, Exception e) {
+    }
 }

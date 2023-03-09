@@ -5,31 +5,38 @@ import org.springframework.util.CollectionUtils;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * 单服务事件总线,用于解耦
+ * TODO 项目启动的时候自动订阅所有handlers
  * @Author Gavin
  * @Date 2022/9/6
  */
 public class DiyEventEmitter{
-    private static Map<Class, Set<AbstractEventHandler>> eventHandlers = new HashMap<>();
+    private static Map<Class, Set<AbstractEventHandler>> eventHandlers = new ConcurrentHashMap<>();
 
     public <T extends AbstractEvent> void subscribe(AbstractEventHandler<T> abstractEventHandler){
         Class<?> eventClass = getActualTypeArgument(abstractEventHandler.getClass());
-        Set<AbstractEventHandler> handlerSet = eventHandlers.get(eventClass);
-        if(handlerSet == null){
-            handlerSet = new HashSet<>();
-        }
-        handlerSet.add(abstractEventHandler);
-        if(!eventHandlers.containsKey(eventClass)){
-            eventHandlers.put(eventClass, handlerSet);
+        synchronized (DiyEventEmitter.class) {
+            Set<AbstractEventHandler> handlerSet = eventHandlers.get(eventClass);
+            if (handlerSet == null) {
+                handlerSet = new HashSet<>();
+            }
+            handlerSet.add(abstractEventHandler);
+            if (!eventHandlers.containsKey(eventClass)) {
+                eventHandlers.put(eventClass, handlerSet);
+            }
         }
     }
 
-    public <T extends AbstractEvent> void unSubscribe(AbstractEventHandler<T> abstractEventHandler){
-        Class<?> eventClass = getActualTypeArgument(abstractEventHandler.getClass());
+    public <T extends AbstractEvent> void unSubscribe(AbstractEventHandler<T> eventHandler){
+        Class<?> eventClass = getActualTypeArgument(eventHandler.getClass());
         if(eventHandlers.containsKey(eventClass)){
             Set<AbstractEventHandler> handlerSet = eventHandlers.get(eventClass);
-            handlerSet.remove(abstractEventHandler);
+            if(handlerSet != null) {
+                handlerSet.remove(eventHandler);
+            }
         }
     }
 
