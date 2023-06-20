@@ -13,6 +13,7 @@
         <module>sentient-report</module>
         <module>sentient-chat</module>
         <module>sentient-ws</module>
+        <module>sentient-sync</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -31,6 +32,7 @@
         <java.version>1.8</java.version>
         <sentient-module.version>0.0.1-SNAPSHOT</sentient-module.version>
         <mybatis-plus.version>3.1.2</mybatis-plus.version>
+        <dynamic-ds.version>3.5.2</dynamic-ds.version>
         <druid.version>1.1.10</druid.version>
         <redis.version>2.1.9.RELEASE</redis.version>
         <lombok.version>1.18.10</lombok.version>
@@ -85,6 +87,12 @@
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-boot-starter</artifactId>
                 <version>${mybatis-plus.version}</version>
+            </dependency>
+            <!-- Dynamic DataSource -->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
+                <version>${dynamic-ds.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.alibaba</groupId>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hoe.sentient.sync.mapper.SyncDataExecutorMapper">
+
+    <insert id="insertData">
+        insert into ${tableName}
+        <foreach collection="dataMap" item="value" index="key" separator="," open="(" close=")">
+            `${key}`
+        </foreach>
+        values
+        <foreach collection="dataMap" item="value" index="key" separator="," open="(" close=")">
+            #{value}
+        </foreach>
+    </insert>
+
+    <insert id="batchInsertData">
+        insert into ${tableName}
+        <foreach collection="mapList[0]" item="value" index="key" separator="," open="(" close=")">
+            `${key}`
+        </foreach>
+        values
+        <foreach collection="mapList" separator="," item="map" index="index">
+            <foreach collection="map" item="value" index="key" separator="," open="(" close=")">
+                #{value}
+            </foreach>
+        </foreach>
+    </insert>
+
+    <delete id="deleteByField">
+        delete from ${tableName} where ${fieldName} = #{fieldValue}
+    </delete>
+
+    <delete id="batchDeleteByField">
+        delete from ${tableName}
+        where ${fieldName} in
+        <foreach collection="fieldValueList" item="item" index="key"  separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+</mapper>
