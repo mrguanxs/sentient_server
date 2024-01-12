@@ -17,7 +17,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
  */
 @Component
 @Slf4j
-@ServerEndpoint("/api/pushMessage/{sid}")
+@ServerEndpoint("/api/websocket/{sid}")
 public class WebSocketServer {
     /**
      * concurrent包的线程安全Set，用来存放每个客户端对应的MyWebSocket对象。

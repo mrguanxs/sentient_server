@@ -19,7 +19,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry
                 //设置连接路径和处理
-                .addHandler(new MyWebSocketHandler(), "/api/pushMessage2/*")
+                .addHandler(new MyWebSocketHandler(), "/api/websocket2/*")
                 //支持跨域
                 .setAllowedOrigins("*")
                 //设置拦截器
