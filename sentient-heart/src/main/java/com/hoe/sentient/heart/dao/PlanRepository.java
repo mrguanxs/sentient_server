@@ -1,6 +1,7 @@
 package com.hoe.sentient.heart.dao;
 
-import com.hoe.sentient.common.base.IRepository;
+
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.hoe.sentient.heart.domain.entity.Plan;
 
 import java.util.List;
@@ -12,6 +13,6 @@ import java.util.List;
  * @author: Gavin
  * @date: 2021-01-28 16:44:20
  */
-public interface PlanRepository extends IRepository<Plan> {
+public interface PlanRepository extends IService<Plan> {
 
 }

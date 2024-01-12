@@ -1,7 +1,8 @@
 package com.hoe.sentient.mood.dao;
 
 
-import com.hoe.sentient.common.base.IRepository;
+import com.baomidou.mybatisplus.extension.service.IService;
+
 import com.hoe.sentient.mood.domain.entity.GuestBook;
 
 /**
@@ -11,6 +12,6 @@ import com.hoe.sentient.mood.domain.entity.GuestBook;
  * @author: Gavin
  * @date: 2021-01-28 16:46:01
  */
-public interface GuestBookRepository extends IRepository<GuestBook> {
+public interface GuestBookRepository extends IService<GuestBook> {
 
 }

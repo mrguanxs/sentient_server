@@ -6,8 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-@EnableWebMvc
-@SpringBootApplication(scanBasePackages="com",
+@SpringBootApplication(scanBasePackages="com.hoe.sentient",
         exclude= DruidDataSourceAutoConfigure.class)
 @MapperScan(value = "com.hoe.sentient.*.mapper")
 public class SentientApiApplication {

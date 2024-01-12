@@ -1,6 +1,6 @@
 package com.hoe.sentient.mood.dao;
 
-import com.hoe.sentient.common.base.IRepository;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.hoe.sentient.mood.domain.entity.Mood;
 
 /**
@@ -10,6 +10,6 @@ import com.hoe.sentient.mood.domain.entity.Mood;
  * @author: Gavin
  * @date: 2021-01-28 16:44:56
  */
-public interface MoodRepository extends IRepository<Mood> {
+public interface MoodRepository extends IService<Mood> {
 
 }

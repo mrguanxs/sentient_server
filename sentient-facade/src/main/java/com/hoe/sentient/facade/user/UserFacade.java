@@ -4,7 +4,6 @@ import com.hoe.sentient.common.util.GeneralAssembler;
 import com.hoe.sentient.facade.user.dto.UserDTO;
 import com.hoe.sentient.user.dao.UserRepository;
 import com.hoe.sentient.user.domain.entity.User;
-import com.hoe.sentient.user.service.UserService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -17,8 +16,6 @@ import javax.annotation.Resource;
  */
 @Component
 public class UserFacade {
-    @Resource
-    private UserService userService;
     @Resource
     private UserRepository userRepository;
 

@@ -1,6 +1,6 @@
 package com.hoe.sentient.user.dao;
 
-import com.hoe.sentient.common.base.IRepository;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.hoe.sentient.user.domain.entity.UserExtension;
 
 /**
@@ -10,6 +10,6 @@ import com.hoe.sentient.user.domain.entity.UserExtension;
  * @author: Gavin
  * @date: 2021-01-28 16:44:00
  */
-public interface UserExtensionRepository extends IRepository<UserExtension> {
+public interface UserExtensionRepository extends IService<UserExtension> {
 
 }

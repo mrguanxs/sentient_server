@@ -1,6 +1,5 @@
 package com.hoe.sentient.common.base;
 
-import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
@@ -13,7 +12,7 @@ import java.util.Date;
  * @Date 2021/1/28 6:23 下午
  */
 @Data
-public class AbstractEntity {
+public abstract class AbstractEntity {
 
     @TableField("created_at")
     private Date createdAt;

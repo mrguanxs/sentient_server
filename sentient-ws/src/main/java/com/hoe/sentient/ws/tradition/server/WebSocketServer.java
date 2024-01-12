@@ -1,16 +1,13 @@
 package com.hoe.sentient.ws.tradition.server;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
-import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * websocket的处理类。
@@ -20,84 +17,67 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Component
 @Slf4j
-@ServerEndpoint("/api/pushMessage/{userId}")
+@ServerEndpoint("/api/pushMessage/{sid}")
 public class WebSocketServer {
+    /**
+     * concurrent包的线程安全Set，用来存放每个客户端对应的MyWebSocket对象。
+     */
+    private static CopyOnWriteArraySet<WebSocketServer> webSockets = new CopyOnWriteArraySet<WebSocketServer>();
+    /**
+     * 用来存在线连接用户信息
+     */
+    private static ConcurrentHashMap<String, Session> sessionPool = new ConcurrentHashMap<String, Session>();
 
-    /**静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。*/
-    private static int onlineCount = 0;
-    /**concurrent包的线程安全Set，用来存放每个客户端对应的WebSocket对象。*/
-    private static ConcurrentHashMap<String,WebSocketServer> webSocketMap = new ConcurrentHashMap<>();
-    /**与某个客户端的连接会话，需要通过它来给客户端发送数据*/
+
+    /**
+     * 与某个客户端的连接会话，需要通过它来给客户端发送数据
+     */
     private Session session;
-    /**接收userId*/
-    private String userId = "";
+    /**
+     * 接收sid
+     */
+    private String sid;
 
     /**
      * 连接建立成功调用的方法
      */
     @OnOpen
-    public void onOpen(Session session, @PathParam("userId") String userId) {
-        this.session = session;
-        this.userId=userId;
-        if(webSocketMap.containsKey(userId)){
-            webSocketMap.remove(userId);
-            //加入set中
-            webSocketMap.put(userId,this);
-        }else{
-            //加入set中
-            webSocketMap.put(userId,this);
-            //在线数加1
-            addOnlineCount();
+    public void onOpen(Session session, @PathParam("sid") String sid) {
+        try {
+            this.session = session;
+            this.sid = sid;
+            webSockets.add(this);
+            sessionPool.put(sid, session);
+            log.info("【websocket消息】有新的连接,sid:{},总数为:" + sid, webSockets.size());
+            session.getAsyncRemote().sendText("连接成功");
+        } catch (Exception e) {
+            log.error("【websocket消息】开启连接异常,sid:{}", sid, e);
         }
-        log.info("用户连接:"+userId+",当前在线人数为:" + getOnlineCount());
-        sendMessage("连接成功");
     }
 
     /**
-     * 连接关闭
-     * 调用的方法
+     * 连接关闭调用的方法
      */
     @OnClose
     public void onClose() {
-        if(webSocketMap.containsKey(userId)){
-            webSocketMap.remove(userId);
-            //从set中删除
-            subOnlineCount();
+        try {
+            webSockets.remove(this);
+            sessionPool.remove(this.sid);
+            log.info("【websocket消息】连接断开,sid:{},总数为:" + this.sid, webSockets.size());
+        }catch (Exception e){
+            log.error("【websocket消息】断开连接异常,sid:{}", this.sid, e);
         }
-        log.info("用户退出:"+userId+",当前在线人数为:" + getOnlineCount());
     }
 
     /**
-     * 收到客户端消
-     * 息后调用的方法
-     * @param message
-     * 客户端发送过来的消息
-     **/
+     * 收到客户端消息后调用的方法
+     *
+     * @param message 客户端发送过来的消息
+     */
     @OnMessage
-    public void onMessage(String message, Session session) {
-        log.info("用户消息:"+userId+",报文:"+message);
-        //可以群发消息
-        //消息保存到数据库、redis
-        if(!StringUtils.isEmpty(message)){
-            try {
-                //解析发送的报文
-                JSONObject jsonObject = JSON.parseObject(message);
-                //追加发送人(防止串改)
-                jsonObject.put("fromUserId",this.userId);
-                String toUserId=jsonObject.getString("toUserId");
-                //传送给对应toUserId用户的websocket
-                if(!StringUtils.isEmpty(toUserId)&&webSocketMap.containsKey(toUserId)){
-                    webSocketMap.get(toUserId).sendMessage(message);
-                }else{
-                    //否则不在这个服务器上，发送到mysql或者redis
-                    log.error("请求的userId:"+toUserId+"不在该服务器上");
-                }
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }
+    public void onMessage(String message) {
+        log.info("【websocket消息】收到客户端消息,sid:{}, msg:{}", this.sid, message);
     }
-
 
     /**
      * @param session
@@ -105,66 +85,33 @@ public class WebSocketServer {
      */
     @OnError
     public void onError(Session session, Throwable error) {
-
-        log.error("用户错误:"+this.userId+",原因:"+error.getMessage());
-        error.printStackTrace();
+        log.error("【websocket消息】发生错误, sid:{}, 原因:{}", this.sid, error.getMessage(), error);
     }
 
     /**
-     * 实现服务器主动推送
+     * 发消息
      */
-    public void sendMessage(String message) {
-        try {
-            this.session.getBasicRemote().sendText(message);
-        } catch (IOException e) {
-            e.printStackTrace();
+    public static void sendMsg(String sid, String message){
+        Session session = sessionPool.get(sid);
+        if(session != null) {
+            session.getAsyncRemote().sendText(message);
+        }else {
+            log.error("【websocket消息】连接未建立,sid:{}", sid);
         }
     }
 
     /**
-     * 发送自定义消息
-     **/
-    public static void sendInfo(String message, String userId) {
-        log.info("发送消息到:"+userId+"，报文:"+message);
-        if(!StringUtils.isEmpty(userId) && webSocketMap.containsKey(userId)){
-            webSocketMap.get(userId).sendMessage(message);
-        }else{
-            log.error("用户"+userId+",不在线！");
+     * 群发消息
+     */
+    public static void sendBatch(String message) {
+        log.info("【websocket消息】批量推送内容:" + message);
+        for (WebSocketServer item : webSockets) {
+            try {
+                item.session.getAsyncRemote().sendText(message);
+            } catch (Exception e) {
+                log.error("【websocket消息】批量推送消息失败:sid:{}, message:{}", item.sid, message);
+            }
         }
-    }
-
-    /**
-     * 广播消息
-     * @param message
-     */
-    public static void fanoutMessage(String message) {
-        log.info("广播消息:"+"，报文:"+message);
-        webSocketMap.keySet().forEach(t->sendInfo(message, t));
-    }
-
-    /**
-     * 获得此时的
-     * 在线人数
-     * @return
-     */
-    public static synchronized int getOnlineCount() {
-        return onlineCount;
-    }
-
-    /**
-     * 在线人
-     * 数加1
-     */
-    public static synchronized void addOnlineCount() {
-        WebSocketServer.onlineCount++;
-    }
-
-    /**
-     * 在线人
-     * 数减1
-     */
-    public static synchronized void subOnlineCount() {
-        WebSocketServer.onlineCount--;
     }
 
 }

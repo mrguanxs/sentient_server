@@ -12,7 +12,7 @@ import java.util.Date;
  * @Date 2021/1/28 6:57 下午
  */
 @Data
-public class AbstractCreateDTO {
+public abstract class AbstractCreateDTO {
     @TableField("created_at")
     private LocalDateTime createdAt;
     @TableField("created_by")

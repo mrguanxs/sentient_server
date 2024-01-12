@@ -1,6 +1,6 @@
 package com.hoe.sentient.user.dao;
 
-import com.hoe.sentient.common.base.IRepository;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.hoe.sentient.user.domain.entity.User;
 
 /**
@@ -10,7 +10,7 @@ import com.hoe.sentient.user.domain.entity.User;
  * @author: Gavin
  * @date: 2021-01-28 16:43:34
  */
-public interface UserRepository extends IRepository<User> {
+public interface UserRepository extends IService<User> {
 
     User getByUsername(String username);
 

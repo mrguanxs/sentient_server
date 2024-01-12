@@ -1,6 +1,6 @@
 package com.hoe.sentient.sync.mapper;
 
-import com.baomidou.dynamic.datasource.annotation.DS;
+//import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -13,7 +13,7 @@ import java.util.Map;
  * @author guan
  * @date 2023/6/14
  */
-@DS("oracle")
+//@DS("oracle")
 @Mapper
 public interface SyncDataSelectMapper extends BaseMapper {
 
